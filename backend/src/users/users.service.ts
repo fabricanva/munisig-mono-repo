@@ -42,6 +42,27 @@ export class UsersService {
     return this.usersRepository.update(id, updateUserDto);
   }
 
+  async createByAdmin(username: string, role: UserRole) {
+    // Generate random 8-char password
+    const temporaryPassword = Math.random().toString(36).slice(-8);
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(temporaryPassword, salt);
+
+    const user = this.usersRepository.create({
+      username,
+      role,
+      passwordHash: hashedPassword,
+    });
+
+    const savedUser = await this.usersRepository.save(user);
+
+    // Return user info AND the temporary password so Admin can share it
+    return {
+      ...savedUser,
+      temporaryPassword,
+    };
+  }
+
   remove(id: number) {
     return this.usersRepository.delete(id);
   }

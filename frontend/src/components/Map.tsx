@@ -95,7 +95,7 @@ export default function MapComponent() {
             >
                 Logout
             </Button>
-            <MapContainer center={[40.785091, -73.968285]} zoom={13} style={{ height: '100%', width: '100%' }}>
+            <MapContainer center={[-16.5, -68.12]} zoom={14} style={{ height: '100%', width: '100%' }}>
                 <LayersControl position="topright">
                     <LayersControl.BaseLayer checked name="OpenStreetMap">
                         <TileLayer

@@ -39,22 +39,22 @@ async function seed() {
         }
     }
 
-    // 2. Create Territory
+    // 2. Create Territory (Plaza Murillo, La Paz)
     try {
-        console.log('Creating Test Territory (Central Park)...');
+        console.log('Creating Test Territory (Plaza Murillo, La Paz)...');
 
-        // Counter-Clockwise Order (Right Hand Rule)
+        // Coordinates around Plaza Murillo
         const territoryData = {
-            name: 'Central Park Test',
-            description: 'A test polygon representing a park area.',
+            name: 'Plaza Murillo - La Paz',
+            description: 'Area histórica de La Paz, Bolivia.',
             polygon: {
                 type: 'Polygon',
                 coordinates: [[
-                    [-73.9819, 40.7681], // SW
-                    [-73.9731, 40.7648], // SE
-                    [-73.9493, 40.7968], // NE
-                    [-73.9580, 40.8003], // NW
-                    [-73.9819, 40.7681]  // SW (Close Loop)
+                    [-68.1305, -16.4955],
+                    [-68.1290, -16.4955],
+                    [-68.1290, -16.4965],
+                    [-68.1305, -16.4965],
+                    [-68.1305, -16.4955]
                 ]]
             }
         };
@@ -62,7 +62,7 @@ async function seed() {
         await axios.post(`${API_URL}/territories`, territoryData, {
             headers: { Authorization: `Bearer ${token}` }
         });
-        console.log('✅ Territory created. ID: Central Park');
+        console.log('✅ Territory created: Plaza Murillo');
 
     } catch (error) {
         console.error('❌ Error creating territory:', error.response ? error.response.data : error.message);
