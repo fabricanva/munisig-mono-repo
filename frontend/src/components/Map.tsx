@@ -4,8 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { useNavigate } from 'react-router';
 
 interface Territory {
     id: number;
@@ -19,15 +18,10 @@ export default function MapComponent() {
     const [territories, setTerritories] = useState<Territory[]>([]);
     const navigate = useNavigate();
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        navigate('/login');
-    };
-
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
-            navigate('/login');
+            navigate('/auth/login');
             return;
         }
 
@@ -38,7 +32,7 @@ export default function MapComponent() {
         }).catch((err) => {
             console.error("Error fetching territories", err);
             if (err.response?.status === 401) {
-                navigate('/login');
+                navigate('/auth/login');
             }
         });
     }, [navigate]);
@@ -54,7 +48,7 @@ export default function MapComponent() {
             const token = localStorage.getItem('token');
             if (!token) {
                 alert('You must be logged in to save territories.');
-                navigate('/login');
+                navigate('/auth/login');
                 return;
             }
 
@@ -72,7 +66,7 @@ export default function MapComponent() {
                 console.error("Error saving territory:", error);
                 if (axios.isAxiosError(error) && error.response?.status === 401) {
                     alert('Session expired. Please login again.');
-                    navigate('/login');
+                    navigate('/auth/login');
                 } else {
                     alert('Error saving territory.');
                 }
@@ -82,19 +76,7 @@ export default function MapComponent() {
 
     return (
         <div style={{ position: 'relative', height: '100vh', width: '100%' }}>
-            <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleLogout}
-                style={{
-                    position: 'absolute',
-                    top: '10px',
-                    right: '10px',
-                    zIndex: 1000
-                }}
-            >
-                Logout
-            </Button>
+
             <MapContainer center={[-16.5, -68.12]} zoom={14} style={{ height: '100%', width: '100%' }}>
                 <LayersControl position="topright">
                     <LayersControl.BaseLayer checked name="OpenStreetMap">
