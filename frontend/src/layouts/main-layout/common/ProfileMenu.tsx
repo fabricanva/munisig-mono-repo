@@ -1,4 +1,5 @@
 import { PropsWithChildren, SyntheticEvent, useState } from 'react';
+import { useNavigate } from 'react-router';
 import {
   Box,
   Button,
@@ -32,10 +33,15 @@ interface ProfileMenuItemProps extends MenuItemProps {
 const ProfileMenu = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-  const open = Boolean(anchorEl);
+  const menuOpen = Boolean(anchorEl);
+  const navigate = useNavigate();
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/auth/login');
+  };
 
   const handleSnackbarOpen = () => setSnackbarOpen(true);
   const handleSnackbarClose = (_event: SyntheticEvent, reason?: SnackbarCloseReason) => {
@@ -73,7 +79,7 @@ const ProfileMenu = () => {
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
-        open={open}
+        open={menuOpen}
         onClose={handleClose}
         transformOrigin={{
           horizontal: 'right',
@@ -131,12 +137,12 @@ const ProfileMenu = () => {
         </Stack>
         <Divider />
         <Box sx={{ py: 1 }}>
-          <ProfileMenuItem icon="material-symbols:accessible-forward-rounded" onClick={handleClose}>
-            Accessibility
-          </ProfileMenuItem>
-
-          <ProfileMenuItem icon="material-symbols:settings-outline-rounded" onClick={handleClose}>
-            Preferences
+          <ProfileMenuItem
+            icon="material-symbols:manage-accounts-outline-rounded"
+            onClick={handleClose}
+            href="#!"
+          >
+            Account Settings
           </ProfileMenuItem>
 
           <ProfileMenuItem
@@ -149,25 +155,14 @@ const ProfileMenu = () => {
         </Box>
         <Divider />
         <Box sx={{ py: 1 }}>
-          <ProfileMenuItem
-            icon="material-symbols:manage-accounts-outline-rounded"
-            onClick={handleClose}
-            href="#!"
-          >
-            Account Settings
-          </ProfileMenuItem>
-          <ProfileMenuItem
-            icon="material-symbols:question-mark-rounded"
-            onClick={handleClose}
-            href="#!"
-          >
-            Help Center
-          </ProfileMenuItem>
-        </Box>
-        <Divider />
-        <Box sx={{ py: 1 }}>
           {demoUser ? (
-            <ProfileMenuItem onClick={handleClose} icon="material-symbols:logout-rounded">
+            <ProfileMenuItem
+              onClick={() => {
+                handleLogout();
+                handleClose();
+              }}
+              icon="material-symbols:logout-rounded"
+            >
               Sign Out
             </ProfileMenuItem>
           ) : (

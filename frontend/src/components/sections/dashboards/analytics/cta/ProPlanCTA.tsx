@@ -1,4 +1,4 @@
-import { Paper, Stack, Typography, Box } from '@mui/material';
+import { Paper, Stack, Box } from '@mui/material';
 
 const ProPlanCTA = () => {
   return (
@@ -20,43 +20,6 @@ const ProPlanCTA = () => {
           alignItems: 'center',
         }}
       >
-        <Stack
-          direction="column"
-          gap={0.5}
-          sx={{
-            alignItems: 'center',
-          }}
-        >
-          <Typography
-            variant="h3"
-            sx={{
-              typography: { xs: 'h4', sm: 'h3' },
-              flexShrink: { sm: 0 },
-              textAlign: 'center',
-            }}
-          >
-            Discover More with Our Pro License
-          </Typography>
-
-          <Stack gap={1} sx={{ alignItems: 'center' }}>
-            <Typography
-              variant="subtitle1"
-              sx={{
-                color: 'text.secondary',
-              }}
-            >
-              Starts from only
-            </Typography>
-            <Typography
-              variant="h6"
-              sx={{
-                color: 'success.dark',
-              }}
-            >
-              $59
-            </Typography>
-          </Stack>
-        </Stack>
       </Stack>
     </Paper>
   );

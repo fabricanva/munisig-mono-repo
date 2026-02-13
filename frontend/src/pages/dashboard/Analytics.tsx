@@ -5,7 +5,6 @@ import {
   userByCountryData,
   userEngagementChartData,
 } from 'data/dashboard';
-import ProPlanCTA from 'components/sections/dashboards/analytics/cta/ProPlanCTA';
 import AnalyticKPI from 'components/sections/dashboards/analytics/kpi/AnalyticKPI';
 import TopCampaigns from 'components/sections/dashboards/analytics/top-campaigns/TopCampaigns';
 import UserByCountry from 'components/sections/dashboards/analytics/user-by-country/UserByCountry';
@@ -32,9 +31,6 @@ const Analytics = () => {
 
       <Grid size={{ xs: 12, xl: 7 }}>
         <UserByCountry data={userByCountryData} />
-      </Grid>
-      <Grid size={12}>
-        <ProPlanCTA />
       </Grid>
     </Grid>
   );
