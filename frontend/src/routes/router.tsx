@@ -7,13 +7,11 @@ import MainLayout from 'layouts/main-layout';
 import Page404 from 'pages/errors/Page404';
 import PageLoader from 'components/loading/PageLoader';
 import paths, { rootPaths } from './paths';
-
 import MapComponent from 'components/Map';
 
 const Analytics = lazy(() => import('pages/dashboard/Analytics'));
 const UserList = lazy(() => import('pages/users/UserList'));
 const Starter = lazy(() => import('pages/others/Starter'));
-const Account = lazy(() => import('pages/others/Account'));
 
 const Login = lazy(() => import('pages/authentication/Login'));
 const Signup = lazy(() => import('pages/authentication/Signup'));
@@ -51,10 +49,6 @@ export const routes: RouteObject[] = [
           {
             path: paths.users,
             element: <UserList />,
-          },
-          {
-            path: paths.account,
-            element: <Account />,
           },
           {
             path: paths.starter,

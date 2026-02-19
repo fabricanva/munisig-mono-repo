@@ -42,7 +42,7 @@ export class TerritoriesController {
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.PROJECT_MANAGER, UserRole.WORKER)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.territoriesService.remove(+id);
