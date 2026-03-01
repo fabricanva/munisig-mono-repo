@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Personnel } from '../../entities/personnel.entity';
 
 export enum UserRole {
     ADMIN = 'admin',
@@ -29,4 +30,8 @@ export class User {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @OneToOne(() => Personnel, personnel => personnel.user, { nullable: true })
+    @JoinColumn()
+    personnel: Personnel;
 }

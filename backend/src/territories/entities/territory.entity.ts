@@ -1,5 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
+import { Project } from '../../entities/project.entity';
+import { Raster } from '../../entities/raster.entity';
+import { Layer } from '../../entities/layer.entity';
 
 @Entity()
 export class Territory {
@@ -28,4 +31,13 @@ export class Territory {
 
     @Column({ nullable: true })
     createdById: number;
+
+    @OneToMany(() => Project, project => project.territory)
+    projects: Project[];
+
+    @OneToMany(() => Raster, raster => raster.territory)
+    rasters: Raster[];
+
+    @ManyToOne(() => Layer, layer => layer.features, { nullable: true })
+    layer: Layer;
 }
