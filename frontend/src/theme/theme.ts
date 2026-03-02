@@ -1,6 +1,6 @@
-import type {} from '@mui/lab/themeAugmentation';
-import type {} from '@mui/material/themeCssVarsAugmentation';
-import type {} from '@mui/x-data-grid/themeAugmentation';
+import type { } from '@mui/lab/themeAugmentation';
+import type { } from '@mui/material/themeCssVarsAugmentation';
+import type { } from '@mui/x-data-grid/themeAugmentation';
 import AppBar from './components/AppBar';
 import Autocomplete from './components/Autocomplete';
 import { Avatar, AvatarGroup } from './components/Avatar';
@@ -41,7 +41,7 @@ import InputAdornment from './components/text-fields/InputAdornment';
 import InputLabel from './components/text-fields/InputLabel';
 import OutlinedInput from './components/text-fields/OutlinedInput';
 import TextField from './components/text-fields/TextField';
-import { paletteOptions } from './palette';
+import { darkPaletteOptions, lightPaletteOptions } from './palette';
 import shadows from './shadows';
 import sxConfig from './sxConfig';
 
@@ -50,10 +50,13 @@ export const themeOverrides = {
   shadows: ['none', ...shadows],
   colorSchemes: {
     light: {
-      palette: paletteOptions,
+      palette: lightPaletteOptions,
       shadows: ['none', ...shadows],
     },
-    dark: false,
+    dark: {
+      palette: darkPaletteOptions,
+      shadows: ['none', ...shadows],
+    },
   },
   unstable_sxConfig: sxConfig,
   components: {

@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { Link, SvgIcon, SvgIconProps, Typography, typographyClasses } from '@mui/material';
+import { Link, SvgIconProps, Typography, typographyClasses } from '@mui/material';
 import { rootPaths } from 'routes/paths';
 
 interface LogoProps extends SvgIconProps {
@@ -7,11 +6,6 @@ interface LogoProps extends SvgIconProps {
 }
 
 const Logo = ({ sx, viewBox = '0 0 26 40', showName = true, ...rest }: LogoProps) => {
-  const [id, setId] = useState('logo');
-
-  useEffect(() => {
-    setId(`logo-${Math.floor(Math.random() * 1000) + 1}`);
-  }, []);
 
   return (
     <Link
@@ -27,7 +21,7 @@ const Logo = ({ sx, viewBox = '0 0 26 40', showName = true, ...rest }: LogoProps
         },
       }}
     >
-      <SvgIcon
+      {/* <SvgIcon
         viewBox={viewBox}
         sx={{
           height: 40,
@@ -128,7 +122,7 @@ const Logo = ({ sx, viewBox = '0 0 26 40', showName = true, ...rest }: LogoProps
             <stop offset="1" stopColor="#20DE99" />
           </linearGradient>
         </defs>
-      </SvgIcon>
+      </SvgIcon> */}
       {showName && (
         <Typography
           sx={{
@@ -140,7 +134,7 @@ const Logo = ({ sx, viewBox = '0 0 26 40', showName = true, ...rest }: LogoProps
             marginLeft: 0.625,
             letterSpacing: '-.8px',
             background: ({ vars }) =>
-              `linear-gradient(100.06deg, #20DE99 6.97%, #7DB1F5 27.63%, #5A9EF6 49.36%, ${vars.palette.text.secondary} 50.11%, ${vars.palette.text.secondary} 87.87%);`,
+              `linear-gradient(100.06deg, #f1f448ff 6.97%, #edbf41ff 27.63%, #f4785fff 49.36%, ${vars.palette.text.secondary} 50.11%, ${vars.palette.text.secondary} 87.87%);`,
             backgroundSize: '240% 100%',
             backgroundPosition: 'right',
             WebkitBackgroundClip: 'text',
@@ -148,7 +142,7 @@ const Logo = ({ sx, viewBox = '0 0 26 40', showName = true, ...rest }: LogoProps
             transition: 'background-position .3s cubic-bezier(0.8, 0.63, .5, 1)',
           }}
         >
-          aurora
+          MUNISIG
         </Typography>
       )}
     </Link>

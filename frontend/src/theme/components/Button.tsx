@@ -124,12 +124,12 @@ const Button: Components<Omit<Theme, 'components'>>['MuiButton'] = {
         const theme = style.theme as Theme;
         return {
           background: theme.vars.palette.background.elevation2,
-          color: theme.vars.palette.neutral.main,
+          color: theme.vars.palette.text.primary,
           '&:hover': {
             background: theme.vars.palette.background.elevation3,
           },
           ...theme.applyStyles('dark', {
-            color: theme.vars.palette.neutral.dark,
+            color: theme.vars.palette.text.primary,
           }),
         };
       },

@@ -1,4 +1,4 @@
-import { PropsWithChildren, SyntheticEvent, useState } from 'react';
+import { PropsWithChildren, useState } from 'react';
 import { useNavigate } from 'react-router';
 import {
   Box,
@@ -8,9 +8,7 @@ import {
   ListItemIcon,
   MenuItem,
   MenuItemProps,
-  SnackbarCloseReason,
   Stack,
-  Switch,
   SxProps,
   Typography,
   listClasses,
@@ -22,7 +20,6 @@ import { users } from 'data/users';
 import paths from 'routes/paths';
 import IconifyIcon from 'components/base/IconifyIcon';
 import StatusAvatar from 'components/base/StatusAvatar';
-import ProSnackbar from './ProSnackbar';
 
 interface ProfileMenuItemProps extends MenuItemProps {
   icon: string;
@@ -31,7 +28,6 @@ interface ProfileMenuItemProps extends MenuItemProps {
 }
 
 const ProfileMenu = () => {
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const menuOpen = Boolean(anchorEl);
   const navigate = useNavigate();
@@ -41,12 +37,6 @@ const ProfileMenu = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/auth/login');
-  };
-
-  const handleSnackbarOpen = () => setSnackbarOpen(true);
-  const handleSnackbarClose = (_event: SyntheticEvent, reason?: SnackbarCloseReason) => {
-    if (reason === 'clickaway') return;
-    setSnackbarOpen(false);
   };
 
   const menuButton = (
@@ -144,14 +134,6 @@ const ProfileMenu = () => {
           >
             Account Settings
           </ProfileMenuItem>
-
-          <ProfileMenuItem
-            onClick={handleSnackbarOpen}
-            icon="material-symbols:dark-mode-outline-rounded"
-          >
-            Dark mode
-            <Switch checked={false} sx={{ ml: 'auto' }} />
-          </ProfileMenuItem>
         </Box>
         <Divider />
         <Box sx={{ py: 1 }}>
@@ -172,7 +154,6 @@ const ProfileMenu = () => {
           )}
         </Box>
       </Menu>
-      <ProSnackbar open={snackbarOpen} onClose={handleSnackbarClose} />
     </>
   );
 };

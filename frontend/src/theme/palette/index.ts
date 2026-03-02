@@ -46,7 +46,7 @@ declare module '@mui/material/styles' {
     darker: string;
   }
 
-  interface SimplePaletteColorOptions extends Partial<PaletteColor> {}
+  interface SimplePaletteColorOptions extends Partial<PaletteColor> { }
 
   interface PaletteColorChannel {
     lighterChannel: string;
@@ -66,7 +66,7 @@ declare module '@mui/material/styles' {
     menuDivider: string;
   }
 
-  interface PaletteOptions extends DeepPartial<Palette> {}
+  interface PaletteOptions extends DeepPartial<Palette> { }
 
   interface CssVarsPalette {
     neutral: PaletteColorChannel;
@@ -177,12 +177,12 @@ const action = generatePaletteChannel({
 const divider = grey[300];
 const menuDivider = cssVarRgba(grey['700Channel'], 0);
 const dividerLight = cssVarRgba(grey['300Channel'], 0.6);
-const text = generatePaletteChannel({
+const lightText = generatePaletteChannel({
   primary: grey[800],
   secondary: grey[600],
   disabled: grey[400],
 });
-const background = generatePaletteChannel({
+const lightBackground = generatePaletteChannel({
   elevation1: grey[50],
   elevation2: grey[100],
   elevation3: grey[200],
@@ -191,6 +191,24 @@ const background = generatePaletteChannel({
   menuElevation1: grey[50],
   menuElevation2: grey[100],
 });
+
+const darkText = generatePaletteChannel({
+  primary: basic.white,
+  secondary: grey[300],
+  disabled: grey[500],
+});
+const darkBackground = generatePaletteChannel({
+  default: grey[800], /* Alternativas de grises oscuros para probar: grey[900], grey[950], o colores custom como '#121212' */
+  paper: grey[800],
+  elevation1: grey[700],
+  elevation2: grey[800],
+  elevation3: grey[900],
+  elevation4: grey[950],
+  menu: grey[800],
+  menuElevation1: grey[700],
+  menuElevation2: grey[800],
+});
+
 const chGrey = grey;
 const chRed = generatePaletteChannel(red);
 const chBlue = generatePaletteChannel(blue);
@@ -198,7 +216,7 @@ const chGreen = generatePaletteChannel(green);
 const chOrange = generatePaletteChannel(orange);
 const chLightBlue = generatePaletteChannel(lightBlue);
 
-export const paletteOptions: PaletteOptions = {
+const basePaletteOptions = {
   common,
   grey,
   primary,
@@ -212,12 +230,22 @@ export const paletteOptions: PaletteOptions = {
   divider,
   dividerLight,
   menuDivider,
-  text,
-  background,
   chGrey,
   chRed,
   chBlue,
   chGreen,
   chOrange,
   chLightBlue,
+};
+
+export const lightPaletteOptions: PaletteOptions = {
+  ...basePaletteOptions,
+  text: lightText,
+  background: lightBackground,
+};
+
+export const darkPaletteOptions: PaletteOptions = {
+  ...basePaletteOptions,
+  text: darkText,
+  background: darkBackground,
 };

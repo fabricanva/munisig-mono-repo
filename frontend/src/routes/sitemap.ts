@@ -45,7 +45,7 @@ const sitemap: MenuItem[] = [
         active: true,
       },
       {
-        name: 'Users',
+        name: 'Usuarios',
         path: paths.users,
         pathName: 'users',
         icon: 'material-symbols:account-box-outline',
