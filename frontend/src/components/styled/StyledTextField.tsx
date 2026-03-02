@@ -156,6 +156,9 @@ const StyledTextField = styled(
     },
     [`&.${inputBaseClasses.focused}`]: {
       backgroundColor: theme.vars.palette.primary.lighter,
+      [theme.getColorSchemeSelector('dark')]: {
+        backgroundColor: '#333857',
+      },
     },
   },
 }));

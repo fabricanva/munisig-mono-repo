@@ -20,6 +20,27 @@ const CssBaseline: Components<Omit<Theme, 'components'>>['MuiCssBaseline'] = {
         scrollMarginTop: 82,
       },
     },
+    // Dark mode: make all outlined input fields clearly visible
+    '[data-aurora-color-scheme="dark"]': {
+      '& .MuiOutlinedInput-root': {
+        backgroundColor: '#2d3141',
+      },
+      '& .MuiOutlinedInput-input': {
+        color: '#ffffff',
+      },
+      '& .MuiOutlinedInput-root textarea': {
+        color: '#ffffff',
+      },
+      '& .MuiInputLabel-root': {
+        color: 'rgba(255,255,255,0.7)',
+      },
+      '& .MuiInputLabel-root.Mui-focused': {
+        color: theme.vars.palette.primary.light,
+      },
+      '& .MuiSelect-select': {
+        color: '#ffffff',
+      },
+    },
     ...simplebar(theme),
     ...keyFrames(),
     ...popper(theme),

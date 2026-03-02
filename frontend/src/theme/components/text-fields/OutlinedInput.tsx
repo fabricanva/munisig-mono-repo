@@ -5,6 +5,23 @@ const OutlinedInput: Components<Omit<Theme, 'components'>>['MuiOutlinedInput'] =
   styleOverrides: {
     root: ({ theme }) => ({
       borderRadius: 8,
+      // Dark mode: use a visible dark-gray background with white text
+      backgroundColor: theme.vars.palette.background.paper,
+      color: theme.vars.palette.text.primary,
+      [theme.getColorSchemeSelector('dark')]: {
+        backgroundColor: 'hsl(220, 10%, 22%)',
+        color: '#fff',
+        '& input, & textarea': {
+          color: '#fff',
+        },
+        '& input::placeholder, & textarea::placeholder': {
+          color: 'rgba(255,255,255,0.45)',
+          opacity: 1,
+        },
+        '& .MuiInputLabel-root': {
+          color: 'rgba(255,255,255,0.7)',
+        },
+      },
       ':hover': {
         [`&:not(&.${outlinedInputClasses.focused},.${outlinedInputClasses.disabled},.${outlinedInputClasses.error})`]:
         {

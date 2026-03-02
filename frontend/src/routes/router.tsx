@@ -11,6 +11,7 @@ import MapComponent from 'components/Map';
 
 const Analytics = lazy(() => import('pages/dashboard/Analytics'));
 const UserList = lazy(() => import('pages/users/UserList'));
+const ProjectList = lazy(() => import('pages/projects/ProjectList'));
 const Starter = lazy(() => import('pages/others/Starter'));
 
 const Login = lazy(() => import('pages/authentication/Login'));
@@ -49,6 +50,10 @@ export const routes: RouteObject[] = [
           {
             path: paths.users,
             element: <UserList />,
+          },
+          {
+            path: paths.projects,
+            element: <ProjectList />,
           },
           {
             path: paths.starter,

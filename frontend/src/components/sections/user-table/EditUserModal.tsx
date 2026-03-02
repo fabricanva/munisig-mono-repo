@@ -14,6 +14,8 @@ import {
     Checkbox,
     Grid,
 } from '@mui/material';
+import type { SxProps, Theme } from '@mui/material';
+import { useColorScheme } from '@mui/material/styles';
 import axios from 'axios';
 
 interface EditUserModalProps {
@@ -108,10 +110,20 @@ const EditUserModal = ({ open, user, onClose, onSuccess }: EditUserModalProps) =
 
     if (!user) return null;
 
+    const { mode } = useColorScheme();
+    const darkSx: SxProps<Theme> | undefined = mode !== 'dark' ? undefined : {
+        '& .MuiInputBase-root': { backgroundColor: '#2d3141 !important', color: '#fff' },
+        '& .MuiInputBase-root.Mui-focused': { backgroundColor: '#333857 !important', boxShadow: '0 0 0 1px #3385F0' },
+        '& .MuiInputBase-root input, & .MuiInputBase-root textarea': { color: '#fff !important' },
+        '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.7)' },
+        '& .MuiSelect-select': { color: '#fff !important' },
+        '& .MuiFormLabel-root': { color: 'rgba(255,255,255,0.7)' },
+    };
+
     return (
         <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
             <DialogTitle>Edit User</DialogTitle>
-            <DialogContent dividers>
+            <DialogContent dividers sx={darkSx}>
                 <Grid container spacing={2}>
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <TextField

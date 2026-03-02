@@ -52,6 +52,13 @@ const sitemap: MenuItem[] = [
         active: true,
       },
       {
+        name: 'Proyectos',
+        path: paths.projects,
+        pathName: 'projects',
+        icon: 'material-symbols:folder-open-outline',
+        active: true,
+      },
+      {
         name: 'Starter',
         path: paths.starter,
         pathName: 'starter',

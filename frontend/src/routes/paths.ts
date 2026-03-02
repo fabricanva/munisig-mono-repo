@@ -12,6 +12,7 @@ const paths = {
   signup: `/${rootPaths.authRoot}/sign-up`,
   notifications: `/notifications`,
   map: `/map`,
+  projects: `/projects`,
 
   404: `/404`,
 };

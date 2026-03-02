@@ -56,6 +56,63 @@ export const themeOverrides = {
     dark: {
       palette: darkPaletteOptions,
       shadows: ['none', ...shadows],
+      components: {
+        MuiFilledInput: {
+          styleOverrides: {
+            root: {
+              backgroundColor: '#2d3141',
+              '&:hover': {
+                backgroundColor: '#333857',
+              },
+              '&.Mui-focused': {
+                backgroundColor: '#333857',
+                boxShadow: '0 0 0 1px #3385F0',
+              },
+            },
+            input: {
+              color: '#ffffff',
+              '&::placeholder': {
+                color: 'rgba(255,255,255,0.45)',
+                opacity: 1,
+              },
+            },
+          },
+        },
+        MuiOutlinedInput: {
+          styleOverrides: {
+            root: {
+              backgroundColor: '#2d3141',
+              '&.Mui-focused': {
+                backgroundColor: '#333857',
+              },
+            },
+            input: {
+              color: '#ffffff',
+              '&::placeholder': {
+                color: 'rgba(255,255,255,0.45)',
+                opacity: 1,
+              },
+            },
+            notchedOutline: {
+              borderColor: 'rgba(255,255,255,0.18)',
+            },
+          },
+        },
+        MuiInputLabel: {
+          styleOverrides: {
+            root: {
+              color: 'rgba(255,255,255,0.65)',
+            },
+          },
+        },
+        MuiSelect: {
+          styleOverrides: {
+            select: {
+              color: '#ffffff',
+            },
+          },
+        },
+      },
     },
   },
   unstable_sxConfig: sxConfig,
