@@ -163,6 +163,18 @@ export default function MapComponent() {
 					</LayersControl.Overlay>
 
 
+					<LayersControl.Overlay name="Riesgo Manzanas (Local)">
+						<WMSTileLayer
+							url="http://localhost:8080/geoserver/munisig/wms"
+							layers="munisig:raster_riesgos"
+							styles="sld_raster_gridcode6"
+							format="image/png"
+							transparent={true}
+							opacity={0.6}
+							version="1.1.0"
+						/>
+					</LayersControl.Overlay>
+
 					<LayersControl.Overlay name="Geología 2025 (Local)">
 						<WMSTileLayer
 							url="http://localhost:8080/geoserver/munisig/wms"
