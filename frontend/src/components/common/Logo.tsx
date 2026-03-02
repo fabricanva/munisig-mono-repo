@@ -5,7 +5,7 @@ interface LogoProps extends SvgIconProps {
   showName?: boolean;
 }
 
-const Logo = ({ sx, viewBox = '0 0 26 40', showName = true, ...rest }: LogoProps) => {
+const Logo = ({ showName = true }: LogoProps) => {
 
   return (
     <Link

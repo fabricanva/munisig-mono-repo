@@ -3,6 +3,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserByAdminDto } from './dto/create-user-admin.dto';
+import { UpdateUserByAdminDto } from './dto/update-user-admin.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
@@ -21,7 +22,14 @@ export class UsersController {
   @Roles(UserRole.ADMIN)
   @Post('create-account')
   createByAdmin(@Body() dto: CreateUserByAdminDto) {
-    return this.usersService.createByAdmin(dto.username, dto.role);
+    return this.usersService.createByAdmin(dto);
+  }
+
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @Patch('update-account/:id')
+  updateByAdmin(@Param('id') id: string, @Body() dto: UpdateUserByAdminDto) {
+    return this.usersService.updateByAdmin(+id, dto);
   }
 
   @Get()

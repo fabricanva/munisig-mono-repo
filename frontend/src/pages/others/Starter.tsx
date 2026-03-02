@@ -54,7 +54,7 @@ const Starter = () => {
               Edit me!
             </Typography>
             <Button
-              href={paths.documentation}
+              href={paths.root}
               target="_blank"
               variant="contained"
               color="primary"

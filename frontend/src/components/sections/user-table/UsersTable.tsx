@@ -1,7 +1,7 @@
 import { RefObject, useMemo } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import Chip, { ChipOwnProps } from '@mui/material/Chip';
+import Chip from '@mui/material/Chip';
 import Link from '@mui/material/Link';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
@@ -12,33 +12,25 @@ import {
   GridRenderCellParams,
 } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
-import { users } from 'data/users';
 import dayjs from 'dayjs';
-import { User } from 'types/users';
 import DashboardMenu from 'components/common/DashboardMenu';
 import DataGridPagination from 'components/pagination/DataGridPagination';
+import EditUserModal from './EditUserModal';
+import { useState } from 'react';
 
 interface UsersTableProps {
   apiRef: RefObject<GridApiCommunity | null>;
   filterButtonEl: HTMLButtonElement | null;
+  data: any[];
+  role: string | null;
 }
 
-const getStatusChipColor = (value: User['status']): ChipOwnProps['color'] => {
-  switch (value) {
-    case 'online':
-      return 'success';
-    case 'offline':
-      return 'error';
-    case 'away':
-      return 'warning';
-    default:
-      return 'neutral';
-  }
-};
+const UsersTable = ({ apiRef, filterButtonEl, data, role }: UsersTableProps) => {
+  const [editUserModalOpen, setEditUserModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
 
-const UsersTable = ({ apiRef, filterButtonEl }: UsersTableProps) => {
-  const columns: GridColDef<User>[] = useMemo(
-    () => [
+  const columns: GridColDef<any>[] = useMemo(() => {
+    const baseColumns: GridColDef<any>[] = [
       {
         ...GRID_CHECKBOX_SELECTION_COL_DEF,
         width: 64,
@@ -51,11 +43,11 @@ const UsersTable = ({ apiRef, filterButtonEl }: UsersTableProps) => {
         filterable: false,
         align: 'center',
         headerAlign: 'center',
-        renderCell: (params: GridRenderCellParams<User>) => (
-          <Tooltip title={params.row.name}>
+        renderCell: (params: GridRenderCellParams<any>) => (
+          <Tooltip title={params.row.firstName || params.row.name || 'User'}>
             <Avatar
               src={params.row.avatar}
-              alt={params.row.name}
+              alt={params.row.firstName || params.row.name}
               sx={{
                 width: 32,
                 height: 32,
@@ -69,16 +61,17 @@ const UsersTable = ({ apiRef, filterButtonEl }: UsersTableProps) => {
         headerName: 'Name',
         minWidth: 160,
         flex: 1,
+        valueGetter: (_, row) => row.firstName && row.lastName ? `${row.firstName} ${row.lastName}` : (row.username || row.name || 'Unknown'),
       },
       {
         field: 'email',
         headerName: 'Email',
         minWidth: 230,
         flex: 1,
-        valueGetter: ({ email }) => email,
-        renderCell: (params: GridRenderCellParams<User>) => (
-          <Link href={`mailto:${params.row.email}`} variant="body2">
-            {params.row.email}
+        valueGetter: (_, row) => row.email || row.user?.username || 'No Email',
+        renderCell: (params: GridRenderCellParams<any>) => (
+          <Link href={`mailto:${params.row.email || params.row.user?.username}`} variant="body2">
+            {params.row.email || params.row.user?.username || 'No Email'}
           </Link>
         ),
       },
@@ -88,10 +81,10 @@ const UsersTable = ({ apiRef, filterButtonEl }: UsersTableProps) => {
         width: 100,
         align: 'center',
         headerAlign: 'center',
-        renderCell: (params: GridRenderCellParams<User>) => (
+        renderCell: (params: GridRenderCellParams<any>) => (
           <Chip
-            label={params.row.status}
-            color={getStatusChipColor(params.row.status)}
+            label={params.row.isActive || params.row.status === 'online' ? 'Active' : 'Offline'}
+            color={params.row.isActive || params.row.status === 'online' ? 'success' : 'error'}
             sx={{
               textTransform: 'capitalize',
             }}
@@ -102,12 +95,13 @@ const UsersTable = ({ apiRef, filterButtonEl }: UsersTableProps) => {
         field: 'role',
         headerName: 'Role',
         width: 130,
-        renderCell: (params: GridRenderCellParams<User>) => <Chip label={params.row.role} />,
+        renderCell: (params: GridRenderCellParams<any>) => <Chip label={params.row.user?.role || params.row.role || 'Personnel'} />,
       },
       {
         field: 'department',
         headerName: 'Department',
         width: 150,
+        valueGetter: (_, row) => row.functionRole || row.department || '-',
       },
       {
         field: 'phone',
@@ -115,22 +109,20 @@ const UsersTable = ({ apiRef, filterButtonEl }: UsersTableProps) => {
         width: 160,
         sortable: false,
         filterable: false,
-      },
-      {
-        field: 'location',
-        headerName: 'Location',
-        width: 160,
-        sortable: false,
+        valueGetter: (_, row) => row.phone || '-',
       },
       {
         field: 'createdAt',
         headerName: 'Created At',
         width: 200,
-        renderCell: (params: GridRenderCellParams<User>) => (
-          <Typography>{dayjs(params.row.createdAt).format('DD MMMM, YYYY')}</Typography>
+        renderCell: (params: GridRenderCellParams<any>) => (
+          <Typography>{dayjs(params.row.createdAt || new Date()).format('DD MMMM, YYYY')}</Typography>
         ),
       },
-      {
+    ];
+
+    if (role !== 'worker') {
+      baseColumns.push({
         field: 'action',
         headerName: '',
         filterable: false,
@@ -138,29 +130,33 @@ const UsersTable = ({ apiRef, filterButtonEl }: UsersTableProps) => {
         width: 60,
         align: 'right',
         headerAlign: 'right',
-        renderCell: () => (
-          <DashboardMenu
-            menuItems={[
+        renderCell: (params: GridRenderCellParams<any>) => {
+          const menuItems = role === 'admin'
+            ? [
               {
                 label: 'Edit',
+                onClick: () => {
+                  setSelectedUser(params.row);
+                  setEditUserModalOpen(true);
+                }
               },
-              {
-                label: 'Delete',
-                sx: { color: 'error.main' },
-              },
-            ]}
-          />
-        ),
-      },
-    ],
-    [],
-  );
+              { label: 'Delete', sx: { color: 'error.main' } }
+            ]
+            : [{ label: 'Remove from Project', sx: { color: 'error.main' } }];
+
+          return <DashboardMenu menuItems={menuItems} />;
+        },
+      });
+    }
+
+    return baseColumns;
+  }, [role]);
 
   return (
     <Box sx={{ width: 1 }}>
       <DataGrid
         rowHeight={64}
-        rows={users}
+        rows={data && data.length > 0 ? data : []}
         apiRef={apiRef}
         columns={columns}
         pageSizeOptions={[8]}
@@ -171,7 +167,7 @@ const UsersTable = ({ apiRef, filterButtonEl }: UsersTableProps) => {
             },
           },
         }}
-        checkboxSelection
+        checkboxSelection={role !== 'worker'}
         slots={{
           basePagination: (props) => <DataGridPagination showFullPagination {...props} />,
         }}
@@ -179,6 +175,15 @@ const UsersTable = ({ apiRef, filterButtonEl }: UsersTableProps) => {
           panel: {
             target: filterButtonEl,
           },
+        }}
+      />
+      <EditUserModal
+        open={editUserModalOpen}
+        user={selectedUser}
+        onClose={() => setEditUserModalOpen(false)}
+        onSuccess={() => {
+          setEditUserModalOpen(false);
+          window.location.reload();
         }}
       />
     </Box>

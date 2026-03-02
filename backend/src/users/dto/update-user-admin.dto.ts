@@ -1,22 +1,26 @@
 import { IsEnum, IsString, IsOptional, IsBoolean, IsNumber } from 'class-validator';
 import { UserRole } from '../entities/user.entity';
 
-export class CreateUserByAdminDto {
+export class UpdateUserByAdminDto {
     @IsString()
-    username: string;
+    @IsOptional()
+    username?: string;
 
     @IsString()
-    firstName: string;
+    @IsOptional()
+    firstName?: string;
 
     @IsString()
-    lastName: string;
+    @IsOptional()
+    lastName?: string;
 
     @IsString()
     @IsOptional()
     email?: string;
 
     @IsEnum(UserRole)
-    role: UserRole;
+    @IsOptional()
+    role?: UserRole;
 
     @IsNumber()
     @IsOptional()
@@ -26,4 +30,3 @@ export class CreateUserByAdminDto {
     @IsOptional()
     isChief?: boolean;
 }
-
