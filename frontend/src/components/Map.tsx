@@ -1,6 +1,7 @@
-import { MapContainer, TileLayer, Polygon, Popup, FeatureGroup, LayersControl, WMSTileLayer } from 'react-leaflet';
+import { MapContainer, TileLayer, Polygon, Popup, FeatureGroup, LayersControl, WMSTileLayer, useMapEvents } from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from '@mui/material';
+import MapLegend from './MapLegend';
 
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
@@ -16,11 +17,27 @@ interface Territory {
 	calculatedArea: number;
 }
 
+/** Listens to Leaflet overlay toggle events and notifies parent */
+function LayerEventTracker({ onChange }: { onChange: (name: string, active: boolean) => void }) {
+	useMapEvents({
+		overlayadd: (e) => onChange(e.name, true),
+		overlayremove: (e) => onChange(e.name, false),
+	});
+	return null;
+}
+
 export default function MapComponent() {
 	const [territories, setTerritories] = useState<Territory[]>([]);
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 	const [idsToDelete, setIdsToDelete] = useState<number[]>([]);
+	const [activeOverlays, setActiveOverlays] = useState<string[]>([]);
 	const navigate = useNavigate();
+
+	const handleOverlayChange = (name: string, active: boolean) => {
+		setActiveOverlays((prev) =>
+			active ? [...prev, name] : prev.filter((n) => n !== name),
+		);
+	};
 
 	const fetchTerritories = () => {
 		const token = localStorage.getItem('token');
@@ -137,6 +154,7 @@ export default function MapComponent() {
 		<div style={{ position: 'relative', height: '100vh', width: '100%' }}>
 
 			<MapContainer center={[-16.5, -68.12]} zoom={14} style={{ height: '100%', width: '100%' }}>
+				<LayerEventTracker onChange={handleOverlayChange} />
 				<LayersControl position="topright">
 					<LayersControl.BaseLayer checked name="OpenStreetMap">
 						<TileLayer
@@ -239,6 +257,8 @@ export default function MapComponent() {
 				</FeatureGroup>
 
 			</MapContainer>
+
+			<MapLegend activeOverlays={activeOverlays} />
 
 			<Dialog open={deleteDialogOpen} onClose={cancelDelete}>
 				<DialogTitle>Confirm Deletion</DialogTitle>

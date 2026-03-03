@@ -85,6 +85,8 @@ const CreateProjectModal = ({ open, onClose, onSuccess }: CreateProjectModalProp
         '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.7)' },
         '& .MuiSelect-select': { color: '#fff !important' },
         '& .MuiFormLabel-root': { color: 'rgba(255,255,255,0.7)' },
+        '& .MuiChip-root': { backgroundColor: '#4a5080', color: '#fff' },
+        '& .MuiChip-label': { color: '#fff' },
     };
 
     return (
