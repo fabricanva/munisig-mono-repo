@@ -9,7 +9,8 @@ import IconifyIcon from 'components/base/IconifyIcon';
 import StyledTextField from 'components/styled/StyledTextField';
 import axios from 'axios';
 import ProjectsTable from './ProjectsTable';
-import CreateProjectModal from './CreateProjectModal';
+import { useNavigate } from 'react-router';
+import paths from 'routes/paths';
 
 const API = 'http://localhost:3000';
 
@@ -17,7 +18,7 @@ const ProjectListContainer = () => {
     const apiRef = useGridApiRef();
     const [role, setRole] = useState<string | null>(null);
     const [projects, setProjects] = useState<any[]>([]);
-    const [createModalOpen, setCreateModalOpen] = useState(false);
+    const navigate = useNavigate();
 
     const fetchProjects = useCallback(async () => {
         try {
@@ -70,7 +71,7 @@ const ProjectListContainer = () => {
                             color="primary"
                             startIcon={<IconifyIcon icon="material-symbols:add-rounded" />}
                             sx={{ flexShrink: 0 }}
-                            onClick={() => setCreateModalOpen(true)}
+                            onClick={() => navigate(paths.createProject)}
                         >
                             Crear Proyecto
                         </Button>
@@ -107,15 +108,6 @@ const ProjectListContainer = () => {
                     <ProjectsTable apiRef={apiRef} data={projects} role={role} onRefresh={fetchProjects} />
                 </Box>
             </Grid>
-
-            <CreateProjectModal
-                open={createModalOpen}
-                onClose={() => setCreateModalOpen(false)}
-                onSuccess={() => {
-                    setCreateModalOpen(false);
-                    fetchProjects();
-                }}
-            />
         </Grid>
     );
 };

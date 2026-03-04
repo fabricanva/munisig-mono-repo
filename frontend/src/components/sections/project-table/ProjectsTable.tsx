@@ -1,4 +1,4 @@
-import { RefObject, useMemo, useState } from 'react';
+import { RefObject, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
@@ -6,8 +6,8 @@ import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import dayjs from 'dayjs';
 import DashboardMenu from 'components/common/DashboardMenu';
-import DataGridPagination from 'components/pagination/DataGridPagination';
-import EditProjectModal from './EditProjectModal';
+import { useNavigate } from 'react-router';
+import paths from 'routes/paths';
 import axios from 'axios';
 
 interface ProjectsTableProps {
@@ -25,8 +25,7 @@ const importanceLabelMap: Record<number, { label: string; color: 'error' | 'warn
 };
 
 const ProjectsTable = ({ apiRef, data, role, onRefresh }: ProjectsTableProps) => {
-    const [editModalOpen, setEditModalOpen] = useState(false);
-    const [selectedProject, setSelectedProject] = useState<any>(null);
+    const navigate = useNavigate();
 
     const handleDelete = async (projectId: number) => {
         if (!confirm('¿Estás seguro de que deseas eliminar este proyecto?')) return;
@@ -122,10 +121,7 @@ const ProjectsTable = ({ apiRef, data, role, onRefresh }: ProjectsTableProps) =>
                             ? [
                                 {
                                     label: 'Editar',
-                                    onClick: () => {
-                                        setSelectedProject(params.row);
-                                        setEditModalOpen(true);
-                                    },
+                                    onClick: () => navigate(paths.editProject(params.row.id)),
                                 },
                                 {
                                     label: 'Eliminar',
@@ -136,10 +132,7 @@ const ProjectsTable = ({ apiRef, data, role, onRefresh }: ProjectsTableProps) =>
                             : [
                                 {
                                     label: 'Editar',
-                                    onClick: () => {
-                                        setSelectedProject(params.row);
-                                        setEditModalOpen(true);
-                                    },
+                                    onClick: () => navigate(paths.editProject(params.row.id)),
                                 },
                             ];
                     return <DashboardMenu menuItems={menuItems} />;
@@ -159,18 +152,6 @@ const ProjectsTable = ({ apiRef, data, role, onRefresh }: ProjectsTableProps) =>
                 columns={columns}
                 pageSizeOptions={[8]}
                 initialState={{ pagination: { paginationModel: { pageSize: 8 } } }}
-                slots={{
-                    basePagination: (props) => <DataGridPagination showFullPagination {...props} />,
-                }}
-            />
-            <EditProjectModal
-                open={editModalOpen}
-                project={selectedProject}
-                onClose={() => setEditModalOpen(false)}
-                onSuccess={() => {
-                    setEditModalOpen(false);
-                    onRefresh();
-                }}
             />
         </Box>
     );

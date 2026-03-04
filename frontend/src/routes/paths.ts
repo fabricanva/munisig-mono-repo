@@ -13,6 +13,8 @@ const paths = {
   notifications: `/notifications`,
   map: `/map`,
   projects: `/projects`,
+  createProject: `/projects/create`,
+  editProject: (id: string | number) => `/projects/edit/${id}`,
 
   404: `/404`,
 };

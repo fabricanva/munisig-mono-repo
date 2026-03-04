@@ -4,6 +4,7 @@ import { Repository, In } from 'typeorm';
 import { Project } from '../entities/project.entity';
 import { WorkGroup } from '../entities/work-group.entity';
 import { Personnel } from '../entities/personnel.entity';
+import { Territory } from '../territories/entities/territory.entity';
 import { User, UserRole } from '../users/entities/user.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
@@ -17,12 +18,14 @@ export class ProjectsService {
         private workGroupRepository: Repository<WorkGroup>,
         @InjectRepository(Personnel)
         private personnelRepository: Repository<Personnel>,
+        @InjectRepository(Territory)
+        private territoryRepository: Repository<Territory>,
     ) { }
 
     async getAllProjects(user: User) {
         if (user.role === UserRole.ADMIN) {
             return this.projectRepository.find({
-                relations: ['workGroup', 'workGroup.chief', 'workGroup.members'],
+                relations: ['workGroup', 'workGroup.chief', 'workGroup.members', 'territory'],
             });
         }
 
@@ -35,7 +38,7 @@ export class ProjectsService {
                 { workGroup: { chief: { id: user.personnel.id } } },
                 { workGroup: { members: { id: user.personnel.id } } },
             ],
-            relations: ['workGroup', 'workGroup.chief', 'workGroup.members'],
+            relations: ['workGroup', 'workGroup.chief', 'workGroup.members', 'territory'],
         });
     }
 
@@ -46,7 +49,7 @@ export class ProjectsService {
     async getProjectById(id: number) {
         const project = await this.projectRepository.findOne({
             where: { id },
-            relations: ['workGroup', 'workGroup.chief', 'workGroup.members', 'workGroup.chief.user', 'workGroup.members.user'],
+            relations: ['workGroup', 'workGroup.chief', 'workGroup.members', 'workGroup.chief.user', 'workGroup.members.user', 'territory'],
         });
 
         if (!project) {
@@ -85,13 +88,18 @@ export class ProjectsService {
             workGroup: savedWg,
         });
 
+        if (dto.territoryId) {
+            const territory = await this.territoryRepository.findOne({ where: { id: dto.territoryId } });
+            if (territory) project.territory = territory;
+        }
+
         return this.projectRepository.save(project);
     }
 
     async updateProject(id: number, dto: UpdateProjectDto, user: User) {
         const project = await this.projectRepository.findOne({
             where: { id },
-            relations: ['workGroup', 'workGroup.chief', 'workGroup.members'],
+            relations: ['workGroup', 'workGroup.chief', 'workGroup.members', 'territory'],
         });
 
         if (!project) throw new NotFoundException('Project not found');
@@ -107,6 +115,15 @@ export class ProjectsService {
         if (dto.startDate) project.startDate = new Date(dto.startDate);
         if (dto.endDate) project.endDate = new Date(dto.endDate);
         if (dto.importanceLevel !== undefined) project.importanceLevel = dto.importanceLevel;
+
+        if (dto.territoryId !== undefined) {
+            if (dto.territoryId === null) {
+                project.territory = null as any;
+            } else {
+                const territory = await this.territoryRepository.findOne({ where: { id: dto.territoryId } });
+                if (territory) project.territory = territory;
+            }
+        }
 
         await this.projectRepository.save(project);
 

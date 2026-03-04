@@ -181,7 +181,7 @@ export default function MapComponent() {
 					</LayersControl.Overlay>
 
 
-					<LayersControl.Overlay name="Riesgo Manzanas (Local)">
+					<LayersControl.Overlay name="Riesgo por deslizamiento">
 						<WMSTileLayer
 							url="http://localhost:8080/geoserver/munisig/wms"
 							layers="munisig:raster_riesgos"

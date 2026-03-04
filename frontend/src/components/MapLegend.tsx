@@ -18,8 +18,8 @@ export const LEGEND_ENTRIES: LegendEntry[] = [
             'https://sitservicios.lapaz.bo/geoserver/sit/wms?SERVICE=WMS&REQUEST=GetLegendGraphic&VERSION=1.1.1&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=lapaz:cuencahidrografica',
     },
     {
-        label: 'Riesgo por deslizamiennto',
-        overlayName: 'Riesgo por deslizamiennto',
+        label: 'Riesgo por deslizamiento',
+        overlayName: 'Riesgo por deslizamiento',
         type: 'wms',
         legendUrl:
             'http://localhost:8080/geoserver/munisig/wms?SERVICE=WMS&REQUEST=GetLegendGraphic&VERSION=1.1.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=munisig:raster_riesgos&STYLE=sld_raster_gridcode6',
@@ -31,13 +31,13 @@ export const LEGEND_ENTRIES: LegendEntry[] = [
         legendUrl:
             'http://localhost:8080/geoserver/munisig/wms?SERVICE=WMS&REQUEST=GetLegendGraphic&VERSION=1.1.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=munisig:geologia2025&STYLE=lp_geologia2025&LEGEND_OPTIONS=columns:5',
     },
-    {
-        label: 'Territorios (GeoServer)',
-        overlayName: 'Territorios (GeoServer Local)',
-        type: 'wms',
-        legendUrl:
-            'http://localhost:8080/geoserver/munisig/wms?SERVICE=WMS&REQUEST=GetLegendGraphic&VERSION=1.1.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=munisig:territory',
-    },
+    // {
+    //     label: 'Territorios (GeoServer)',
+    //     overlayName: 'Territorios (GeoServer Local)',
+    //     type: 'wms',
+    //     legendUrl:
+    //         'http://localhost:8080/geoserver/munisig/wms?SERVICE=WMS&REQUEST=GetLegendGraphic&VERSION=1.1.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=munisig:territory',
+    // },
     {
         label: 'Territorios (dibujados)',
         overlayName: null, // always shown since polygons are always rendered

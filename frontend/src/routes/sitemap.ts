@@ -58,13 +58,13 @@ const sitemap: MenuItem[] = [
         icon: 'material-symbols:folder-open-outline',
         active: true,
       },
-      {
-        name: 'Starter',
-        path: paths.starter,
-        pathName: 'starter',
-        icon: 'material-symbols:play-circle-outline-rounded',
-        active: true,
-      },
+      // {
+      //   name: 'Starter',
+      //   path: paths.starter,
+      //   pathName: 'starter',
+      //   icon: 'material-symbols:play-circle-outline-rounded',
+      //   active: true,
+      // },
       {
         name: 'Error 404',
         pathName: 'error',

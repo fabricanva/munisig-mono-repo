@@ -35,4 +35,8 @@ export class CreateProjectDto {
     @IsArray()
     @IsOptional()
     memberPersonnelIds?: number[];
+
+    @IsNumber()
+    @IsOptional()
+    territoryId?: number;
 }
