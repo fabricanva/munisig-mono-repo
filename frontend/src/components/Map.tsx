@@ -193,7 +193,7 @@ export default function MapComponent() {
 						/>
 					</LayersControl.Overlay>
 
-					<LayersControl.Overlay name="Geología 2025 (Local)">
+					<LayersControl.Overlay name="Geología 2025">
 						<WMSTileLayer
 							url="http://localhost:8080/geoserver/munisig/wms"
 							layers="munisig:geologia2025"

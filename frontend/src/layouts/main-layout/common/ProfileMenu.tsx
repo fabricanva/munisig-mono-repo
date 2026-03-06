@@ -1,5 +1,6 @@
-import { PropsWithChildren, useState } from 'react';
+import { PropsWithChildren, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import axios from 'axios';
 import {
   Box,
   Button,
@@ -16,7 +17,6 @@ import {
   paperClasses,
 } from '@mui/material';
 import Menu from '@mui/material/Menu';
-import { users } from 'data/users';
 import paths from 'routes/paths';
 import IconifyIcon from 'components/base/IconifyIcon';
 import StatusAvatar from 'components/base/StatusAvatar';
@@ -31,6 +31,43 @@ const ProfileMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const menuOpen = Boolean(anchorEl);
   const navigate = useNavigate();
+  const [profile, setProfile] = useState<any>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const payloadStr = atob(token.split('.')[1]);
+        const payload = JSON.parse(payloadStr);
+        const userId = payload.sub;
+
+        axios.get(`http://localhost:3000/users/${userId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        }).then(res => {
+          const user = res.data;
+          let name = user.username;
+          let designation = user.role;
+          let initials = name.substring(0, 2).toUpperCase();
+
+          if (user.personnel) {
+            name = `${user.personnel.firstName || ''} ${user.personnel.lastName || ''}`.trim() || name;
+            const fInitial = user.personnel.firstName ? user.personnel.firstName.charAt(0).toUpperCase() : '';
+            const lInitial = user.personnel.lastName ? user.personnel.lastName.charAt(0).toUpperCase() : '';
+            if (fInitial || lInitial) {
+              initials = `${fInitial}${lInitial}`;
+            }
+            if (user.personnel.functionRole) {
+              designation = user.personnel.functionRole;
+            }
+          }
+          setProfile({ name, designation, initials });
+        }).catch(err => console.error("Could not fetch user profile", err));
+      } catch (err) {
+        console.error("Could not parse token", err);
+      }
+    }
+  }, []);
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
 
@@ -51,16 +88,18 @@ const ProfileMenu = () => {
       }}
     >
       <StatusAvatar
-        alt={demoUser.name}
+        alt={profile?.name || demoUser.name}
         status="online"
-        src={demoUser.avatar ?? undefined}
+        src={profile?.avatar || demoUser.avatar || undefined}
         sx={{
           width: 40,
           height: 40,
           border: 2,
           borderColor: 'background.paper',
         }}
-      />
+      >
+        {profile?.initials}
+      </StatusAvatar>
     </Button>
   );
   return (
@@ -94,10 +133,12 @@ const ProfileMenu = () => {
         >
           <StatusAvatar
             status="online"
-            alt={demoUser.name}
-            src={demoUser.avatar ?? undefined}
+            alt={profile?.name || demoUser.name}
+            src={profile?.avatar || demoUser.avatar || undefined}
             sx={{ width: 48, height: 48 }}
-          />
+          >
+            {profile?.initials}
+          </StatusAvatar>
           <Box>
             <Typography
               variant="subtitle1"
@@ -106,16 +147,17 @@ const ProfileMenu = () => {
                 mb: 0.5,
               }}
             >
-              {demoUser.name}
+              {profile?.name || demoUser.name}
             </Typography>
-            {demoUser.designation && (
+            {(profile?.designation || demoUser.designation) && (
               <Typography
                 variant="subtitle2"
+                textTransform="capitalize"
                 sx={{
                   color: 'warning.main',
                 }}
               >
-                {demoUser.designation}
+                {profile?.designation || demoUser.designation}
                 <IconifyIcon
                   icon="material-symbols:diamond-rounded"
                   color="warning.main"
@@ -137,7 +179,7 @@ const ProfileMenu = () => {
         </Box>
         <Divider />
         <Box sx={{ py: 1 }}>
-          {demoUser ? (
+          {profile || demoUser ? (
             <ProfileMenuItem
               onClick={() => {
                 handleLogout();
@@ -186,6 +228,6 @@ const demoUser = {
   id: 0,
   email: 'guest@mail.com',
   name: 'Guest',
-  avatar: users[13].avatar,
-  designation: 'Merchant Captian ',
+  designation: undefined, // Type requirement
+  avatar: undefined // Remove the default image so it falls back to the generated initials correctly
 };

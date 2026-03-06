@@ -26,7 +26,7 @@ export const LEGEND_ENTRIES: LegendEntry[] = [
     },
     {
         label: 'Geología 2025',
-        overlayName: 'Geología 2025 (Local)',
+        overlayName: 'Geología 2025',
         type: 'wms',
         legendUrl:
             'http://localhost:8080/geoserver/munisig/wms?SERVICE=WMS&REQUEST=GetLegendGraphic&VERSION=1.1.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=munisig:geologia2025&STYLE=lp_geologia2025&LEGEND_OPTIONS=columns:5',
